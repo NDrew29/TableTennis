@@ -40,18 +40,15 @@ function checkGameWin() {
         const winner = p1Score > p2Score ? player1Name : player2Name;
         const loser  = p1Score < p2Score ? player1Name : player2Name;
 
-        // Update win counters
         if (p1Score > p2Score) p1Wins++;
         else p2Wins++;
 
-        // Save history
         gameHistory.push({ game: gameNumber, p1: p1Score, p2: p2Score });
         updateHistoryList();
 
-        // Check if match is over
         if (p1Wins === gamesToWin || p2Wins === gamesToWin) {
             recordMatchResult(winner, loser);
-            alert(`🏆 ${winner} wins the match!`);
+            showMatchSummary(winner);
         } else {
             alert(`🎯 ${winner} wins game ${gameNumber}`);
             gameNumber++;
@@ -88,4 +85,21 @@ function recordMatchResult(winner, loser) {
     records[loser].losses++;
 
     localStorage.setItem("playerRecords", JSON.stringify(records));
+}
+
+function showMatchSummary(winner) {
+    const modal = document.getElementById("matchSummary");
+    const summaryText = document.getElementById("winnerSummary");
+    const summaryList = document.getElementById("summaryList");
+
+    summaryText.textContent = `${winner} wins the match!`;
+
+    summaryList.innerHTML = "";
+    gameHistory.forEach(game => {
+        const li = document.createElement("li");
+        li.textContent = `Game ${game.game}: ${player1Name} ${game.p1} - ${game.p2} ${player2Name}`;
+        summaryList.appendChild(li);
+    });
+
+    modal.classList.remove("hidden");
 }
