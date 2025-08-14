@@ -104,3 +104,36 @@ ul li {
     text-decoration: none;
     border-radius: 6px;
 }
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content ul {
+    text-align: left;
+    margin-top: 1rem;
+}
