@@ -33,6 +33,6 @@ function updateServeIndicator() {
 function checkWin() {
     if ((p1Score >= 11 || p2Score >= 11) && Math.abs(p1Score - p2Score) >= 2) {
         alert(`🏆 ${p1Score > p2Score ? player1Name : player2Name} wins the game!`);
-        // Reset or extend for match logic
+        // You can add match history logic here later.
     }
 }
