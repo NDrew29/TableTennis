@@ -7,65 +7,31 @@
     <link rel="stylesheet" href="site.css" />
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">🏓 Ping Pong Scoreboard</h1>
+    <div class="container">
+        <h1>🏓 Ping Pong Scoreboard</h1>
 
-        <form id="matchSetupForm">
-            <div class="form-group">
-                <label for="player1">Player 1 Name</label>
-                <input type="text" id="player1" class="form-control" required />
-            </div>
+        <form id="matchSetupForm" class="card">
+            <label for="player1">Player 1 Name</label>
+            <input type="text" id="player1" required />
 
-            <div class="form-group mt-3">
-                <label for="player2">Player 2 Name</label>
-                <input type="text" id="player2" class="form-control" required />
-            </div>
+            <label for="player2">Player 2 Name</label>
+            <input type="text" id="player2" required />
 
-            <div class="form-group mt-3">
-                <label for="matchType">Match Type</label>
-                <select id="matchType" class="form-control">
-                    <option value="3">Best of 3</option>
-                    <option value="5">Best of 5</option>
-                    <option value="7">Best of 7</option>
-                    <option value="9">Best of 9</option>
-                </select>
-            </div>
+            <label for="matchType">Match Type</label>
+            <select id="matchType">
+                <option value="3">Best of 3</option>
+                <option value="5">Best of 5</option>
+                <option value="7">Best of 7</option>
+            </select>
 
-            <button type="submit" class="btn btn-primary mt-4 w-100">Start Match</button>
+            <button type="submit">Start Match</button>
         </form>
-    </div>
 
-    <div>
-        <div class="mt-5">
-    <h3>Player Records</h3>
-    <div id="records"></div>
-</div>
-
-<script>
-    function showRecords() {
-        const data = JSON.parse(localStorage.getItem("playerRecords") || "{}");
-        const container = document.getElementById("records");
-        container.innerHTML = "";
-
-        if (Object.keys(data).length === 0) {
-            container.innerText = "No records yet.";
-            return;
-        }
-
-        const list = document.createElement("ul");
-        for (const [name, record] of Object.entries(data)) {
-            const item = document.createElement("li");
-            item.textContent = `${name}: ${record.wins} Wins / ${record.losses} Losses`;
-            list.appendChild(item);
-        }
-        container.appendChild(list);
-    }
-
-    showRecords();
-</script>
-        <button onclick="localStorage.removeItem('playerRecords'); location.reload();" class="btn btn-sm btn-danger mt-3">
-    Reset Records
-        </button>
+        <section class="card mt-4">
+            <h2>📊 Player Records</h2>
+            <div id="records"></div>
+            <button class="danger" onclick="resetRecords()">Reset Records</button>
+        </section>
     </div>
 
     <script>
@@ -74,10 +40,37 @@
             const p1 = document.getElementById('player1').value.trim();
             const p2 = document.getElementById('player2').value.trim();
             const matchType = document.getElementById('matchType').value;
+
             if (!p1 || !p2) return;
 
             window.location.href = `scoreboard.html?p1=${encodeURIComponent(p1)}&p2=${encodeURIComponent(p2)}&match=${matchType}`;
         });
+
+        function showRecords() {
+            const data = JSON.parse(localStorage.getItem("playerRecords") || "{}");
+            const container = document.getElementById("records");
+            container.innerHTML = "";
+
+            if (Object.keys(data).length === 0) {
+                container.textContent = "No records yet.";
+                return;
+            }
+
+            const list = document.createElement("ul");
+            for (const [name, record] of Object.entries(data)) {
+                const item = document.createElement("li");
+                item.textContent = `${name}: ${record.wins} Wins / ${record.losses} Losses`;
+                list.appendChild(item);
+            }
+            container.appendChild(list);
+        }
+
+        function resetRecords() {
+            localStorage.removeItem("playerRecords");
+            showRecords();
+        }
+
+        showRecords();
     </script>
 </body>
 </html>
