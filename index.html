@@ -35,6 +35,39 @@
         </form>
     </div>
 
+    <div>
+        <div class="mt-5">
+    <h3>Player Records</h3>
+    <div id="records"></div>
+</div>
+
+<script>
+    function showRecords() {
+        const data = JSON.parse(localStorage.getItem("playerRecords") || "{}");
+        const container = document.getElementById("records");
+        container.innerHTML = "";
+
+        if (Object.keys(data).length === 0) {
+            container.innerText = "No records yet.";
+            return;
+        }
+
+        const list = document.createElement("ul");
+        for (const [name, record] of Object.entries(data)) {
+            const item = document.createElement("li");
+            item.textContent = `${name}: ${record.wins} Wins / ${record.losses} Losses`;
+            list.appendChild(item);
+        }
+        container.appendChild(list);
+    }
+
+    showRecords();
+</script>
+        <button onclick="localStorage.removeItem('playerRecords'); location.reload();" class="btn btn-sm btn-danger mt-3">
+    Reset Records
+        </button>
+    </div>
+
     <script>
         document.getElementById('matchSetupForm').addEventListener('submit', function (e) {
             e.preventDefault();
