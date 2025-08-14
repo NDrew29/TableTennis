@@ -13,7 +13,9 @@
 │   └── GameSettings.cs
 
 ├── Views/
+
 │   ├── Game/
+
 │   │   ├── Index.cshtml        <-- Main menu & match setup
 
 │   │   └── Scoreboard.cshtml   <-- Live match scoring
