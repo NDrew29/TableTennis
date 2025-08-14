@@ -43,7 +43,6 @@
             const matchType = document.getElementById('matchType').value;
             if (!p1 || !p2) return;
 
-            // Redirect with query parameters
             window.location.href = `scoreboard.html?p1=${encodeURIComponent(p1)}&p2=${encodeURIComponent(p2)}&match=${matchType}`;
         });
     </script>
