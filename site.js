@@ -9,17 +9,34 @@ let gameNumber = 1;
 let gameHistory = [];
 let p1Wins = 0;
 let p2Wins = 0;
+let actionHistory = []; // 👈 Track scoring events for undo
 
 document.getElementById('name1').innerText = player1Name;
 document.getElementById('name2').innerText = player2Name;
 
 function incrementScore(player) {
+    // Save current state BEFORE change
+    actionHistory.push({ p1Score, p2Score });
+
     if (player === 1) p1Score++;
     else p2Score++;
 
     updateServeIndicator();
     updateScores();
     checkGameWin();
+}
+
+function undoLastAction() {
+    if (actionHistory.length === 0) {
+        alert("Nothing to undo.");
+        return;
+    }
+
+    const lastState = actionHistory.pop();
+    p1Score = lastState.p1Score;
+    p2Score = lastState.p2Score;
+    updateScores();
+    updateServeIndicator();
 }
 
 function updateScores() {
@@ -46,6 +63,9 @@ function checkGameWin() {
         gameHistory.push({ game: gameNumber, p1: p1Score, p2: p2Score });
         updateHistoryList();
 
+        // Clear point-level undo stack
+        actionHistory = [];
+
         if (p1Wins === gamesToWin || p2Wins === gamesToWin) {
             recordMatchResult(winner, loser);
             showMatchSummary(winner);
@@ -71,6 +91,7 @@ function updateHistoryList() {
 function resetCurrentGame() {
     p1Score = 0;
     p2Score = 0;
+    actionHistory = []; // Also reset undo stack
     updateScores();
     updateServeIndicator();
 }
