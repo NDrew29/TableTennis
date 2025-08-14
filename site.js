@@ -2,6 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const player1Name = urlParams.get('p1') || "Player 1";
 const player2Name = urlParams.get('p2') || "Player 2";
 const matchLength = parseInt(urlParams.get('match')) || 3;
+const gamesToWin = Math.ceil(matchLength / 2);
 
 let p1Score = 0, p2Score = 0;
 
@@ -32,29 +33,23 @@ function updateServeIndicator() {
 
 function checkWin() {
     if ((p1Score >= 11 || p2Score >= 11) && Math.abs(p1Score - p2Score) >= 2) {
-    const winner = p1Score > p2Score ? player1Name : player2Name;
-    const loser  = p1Score < p2Score ? player1Name : player2Name;
+        const winner = p1Score > p2Score ? player1Name : player2Name;
+        const loser  = p1Score < p2Score ? player1Name : player2Name;
 
-    recordMatchResult(winner, loser);
+        recordMatchResult(winner, loser);
 
-    alert(`🏆 ${winner} wins the game!`);
+        alert(`🏆 ${winner} wins the game!`);
+    }
 }
-    
-}
 
-function recordMatchResult(winnerName, loserName) {
+function recordMatchResult(winner, loser) {
     const records = JSON.parse(localStorage.getItem("playerRecords") || "{}");
 
-    if (!records[winnerName]) {
-        records[winnerName] = { wins: 0, losses: 0 };
-    }
-    if (!records[loserName]) {
-        records[loserName] = { wins: 0, losses: 0 };
-    }
+    if (!records[winner]) records[winner] = { wins: 0, losses: 0 };
+    if (!records[loser])  records[loser]  = { wins: 0, losses: 0 };
 
-    records[winnerName].wins++;
-    records[loserName].losses++;
+    records[winner].wins++;
+    records[loser].losses++;
 
     localStorage.setItem("playerRecords", JSON.stringify(records));
 }
-
