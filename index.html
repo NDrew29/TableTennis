@@ -1,11 +1,8 @@
-@{
-    ViewData["Title"] = "Ping Pong Scoreboard - Setup";
-}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🏓 Ping Pong Scoreboard</title>
     <link rel="stylesheet" href="site.css" />
 </head>
@@ -15,17 +12,17 @@
 
         <form id="matchSetupForm">
             <div class="form-group">
-                <label>Player 1 Name</label>
-                <input id="player1" class="form-control" required />
+                <label for="player1">Player 1 Name</label>
+                <input type="text" id="player1" class="form-control" required />
             </div>
 
             <div class="form-group mt-3">
-                <label>Player 2 Name</label>
-                <input id="player2" class="form-control" required />
+                <label for="player2">Player 2 Name</label>
+                <input type="text" id="player2" class="form-control" required />
             </div>
 
             <div class="form-group mt-3">
-                <label>Match Type</label>
+                <label for="matchType">Match Type</label>
                 <select id="matchType" class="form-control">
                     <option value="3">Best of 3</option>
                     <option value="5">Best of 5</option>
@@ -41,9 +38,12 @@
     <script>
         document.getElementById('matchSetupForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const p1 = document.getElementById('player1').value;
-            const p2 = document.getElementById('player2').value;
+            const p1 = document.getElementById('player1').value.trim();
+            const p2 = document.getElementById('player2').value.trim();
             const matchType = document.getElementById('matchType').value;
+            if (!p1 || !p2) return;
+
+            // Redirect with query parameters
             window.location.href = `scoreboard.html?p1=${encodeURIComponent(p1)}&p2=${encodeURIComponent(p2)}&match=${matchType}`;
         });
     </script>
