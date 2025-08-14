@@ -5,6 +5,10 @@ const matchLength = parseInt(urlParams.get('match')) || 3;
 const gamesToWin = Math.ceil(matchLength / 2);
 
 let p1Score = 0, p2Score = 0;
+let gameNumber = 1;
+let gameHistory = [];
+let p1Wins = 0;
+let p2Wins = 0;
 
 document.getElementById('name1').innerText = player1Name;
 document.getElementById('name2').innerText = player2Name;
@@ -15,7 +19,7 @@ function incrementScore(player) {
 
     updateServeIndicator();
     updateScores();
-    checkWin();
+    checkGameWin();
 }
 
 function updateScores() {
@@ -31,15 +35,47 @@ function updateServeIndicator() {
     document.getElementById("server").innerText = `Serving: Player ${server}`;
 }
 
-function checkWin() {
+function checkGameWin() {
     if ((p1Score >= 11 || p2Score >= 11) && Math.abs(p1Score - p2Score) >= 2) {
         const winner = p1Score > p2Score ? player1Name : player2Name;
         const loser  = p1Score < p2Score ? player1Name : player2Name;
 
-        recordMatchResult(winner, loser);
+        // Update win counters
+        if (p1Score > p2Score) p1Wins++;
+        else p2Wins++;
 
-        alert(`🏆 ${winner} wins the game!`);
+        // Save history
+        gameHistory.push({ game: gameNumber, p1: p1Score, p2: p2Score });
+        updateHistoryList();
+
+        // Check if match is over
+        if (p1Wins === gamesToWin || p2Wins === gamesToWin) {
+            recordMatchResult(winner, loser);
+            alert(`🏆 ${winner} wins the match!`);
+        } else {
+            alert(`🎯 ${winner} wins game ${gameNumber}`);
+            gameNumber++;
+            resetCurrentGame();
+        }
     }
+}
+
+function updateHistoryList() {
+    const list = document.getElementById("historyList");
+    list.innerHTML = "";
+
+    gameHistory.forEach(game => {
+        const li = document.createElement("li");
+        li.textContent = `Game ${game.game}: ${player1Name} ${game.p1} - ${game.p2} ${player2Name}`;
+        list.appendChild(li);
+    });
+}
+
+function resetCurrentGame() {
+    p1Score = 0;
+    p2Score = 0;
+    updateScores();
+    updateServeIndicator();
 }
 
 function recordMatchResult(winner, loser) {
