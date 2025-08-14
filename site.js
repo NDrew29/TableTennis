@@ -32,7 +32,29 @@ function updateServeIndicator() {
 
 function checkWin() {
     if ((p1Score >= 11 || p2Score >= 11) && Math.abs(p1Score - p2Score) >= 2) {
-        alert(`🏆 ${p1Score > p2Score ? player1Name : player2Name} wins the game!`);
-        // You can add match history logic here later.
-    }
+    const winner = p1Score > p2Score ? player1Name : player2Name;
+    const loser  = p1Score < p2Score ? player1Name : player2Name;
+
+    recordMatchResult(winner, loser);
+
+    alert(`🏆 ${winner} wins the game!`);
 }
+    
+}
+
+function recordMatchResult(winnerName, loserName) {
+    const records = JSON.parse(localStorage.getItem("playerRecords") || "{}");
+
+    if (!records[winnerName]) {
+        records[winnerName] = { wins: 0, losses: 0 };
+    }
+    if (!records[loserName]) {
+        records[loserName] = { wins: 0, losses: 0 };
+    }
+
+    records[winnerName].wins++;
+    records[loserName].losses++;
+
+    localStorage.setItem("playerRecords", JSON.stringify(records));
+}
+
