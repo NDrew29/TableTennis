@@ -99,14 +99,31 @@ function resetCurrentGame() {
 function recordMatchResult(winner, loser) {
     const records = JSON.parse(localStorage.getItem("playerRecords") || "{}");
 
-    if (!records[winner]) records[winner] = { wins: 0, losses: 0 };
-    if (!records[loser])  records[loser]  = { wins: 0, losses: 0 };
+    // Ensure both players exist
+    if (!records[winner]) {
+        records[winner] = { wins: 0, losses: 0, gamesWon: 0, gamesPlayed: 0, streak: "", lastOpponent: "" };
+    }
+    if (!records[loser]) {
+        records[loser] = { wins: 0, losses: 0, gamesWon: 0, gamesPlayed: 0, streak: "", lastOpponent: "" };
+    }
 
+    // Update winner
     records[winner].wins++;
+    records[winner].gamesWon += gameHistory.filter(g => (g.p1 > g.p2 && player1Name === winner) || (g.p2 > g.p1 && player2Name === winner)).length;
+    records[winner].gamesPlayed += gameHistory.length;
+    records[winner].streak = updateStreak(records[winner].streak, true);
+    records[winner].lastOpponent = loser;
+
+    // Update loser
     records[loser].losses++;
+    records[loser].gamesWon += gameHistory.filter(g => (g.p1 > g.p2 && player1Name === loser) || (g.p2 > g.p1 && player2Name === loser)).length;
+    records[loser].gamesPlayed += gameHistory.length;
+    records[loser].streak = updateStreak(records[loser].streak, false);
+    records[loser].lastOpponent = winner;
 
     localStorage.setItem("playerRecords", JSON.stringify(records));
 }
+
 
 function showMatchSummary(winner) {
     const modal = document.getElementById("matchSummary");
@@ -123,4 +140,17 @@ function showMatchSummary(winner) {
     });
 
     modal.classList.remove("hidden");
+}
+
+function updateStreak(currentStreak, isWin) {
+    if (!currentStreak) return isWin ? "W1" : "L1";
+
+    const prefix = currentStreak[0];
+    const count = parseInt(currentStreak.slice(1)) || 0;
+
+    if ((isWin && prefix === "W") || (!isWin && prefix === "L")) {
+        return `${prefix}${count + 1}`;
+    } else {
+        return isWin ? "W1" : "L1";
+    }
 }
