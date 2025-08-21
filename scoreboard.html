@@ -8,8 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🏓 Live Match</h1>
-
+        <h1>
+            🏓 Live Match 
+            <span id="rulesInfo" title="Click for Rules" style="cursor: pointer; font-size: 1.1rem; margin-left: 8px;">ℹ️</span>
+        </h1>
         <div class="scoreboard">
             <div class="player" id="player1Block">
                 <h2 id="name1">Player 1</h2>
@@ -50,6 +52,50 @@
             <button onclick="window.location.href='index.html'" class="btn mt-3">🔁 Start New Match</button>
         </div>
     </div>
+
+    <!-- Rules Modal -->
+<div id="rulesModal" class="modal hidden">
+    <div class="modal-content">
+        <h2>📘 Official Ping Pong Rules</h2>
+
+        <h3>🎯 Starting the Match</h3>
+        <ul>
+            <li>First server is decided by a random draw (coin toss, etc.).</li>
+            <li>Winner chooses to:
+                <ul>
+                    <li>Serve</li>
+                    <li>Receive</li>
+                    <li>Pick table side</li>
+                </ul>
+            </li>
+            <li>The other player selects from the remaining options.</li>
+        </ul>
+
+        <h3>🔁 Serving Order</h3>
+        <ul>
+            <li>Service changes every 2 points.</li>
+            <li>At <strong>10-10</strong> (deuce), serve alternates after each point until someone leads by 2.</li>
+        </ul>
+
+        <h3>👥 Doubles Matches</h3>
+        <ul>
+            <li>Serving team chooses the first server.</li>
+            <li>Receiving team chooses the first receiver.</li>
+            <li>With each service change: receiver becomes server, and previous server’s partner becomes receiver.</li>
+        </ul>
+
+        <h3>✅ Legal Serve</h3>
+        <ul>
+            <li>Ball must be tossed up from a flat palm, at least <strong>6 inches</strong>.</li>
+            <li>Contact must be behind the table surface.</li>
+            <li>You cannot hide the ball with your body or arm.</li>
+            <li>If ball hits net on serve, it’s a <em>let</em> and replayed — no penalty or limit.</li>
+        </ul>
+
+        <button onclick="closeRulesModal()" class="btn mt-3">Close</button>
+    </div>
+</div>
+
 
     <script src="site.js"></script>
 </body>
