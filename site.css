@@ -138,23 +138,52 @@ ul li {
     margin-top: 1rem;
 }
 
+/* ===== Enhanced Records Table ===== */
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 1rem;
     font-size: 0.95rem;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    padding: 0.6rem;
-    text-align: center;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 thead {
-    background-color: #f8f9fa;
-    cursor: pointer;
+    background-color: #0d6efd;
+    color: white;
+    font-weight: bold;
 }
+
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+th:hover {
+    background-color: #0b5ed7;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+button.btn.mt-3 {
+    margin-top
+
 
 th:hover {
     background-color: #e9ecef;
