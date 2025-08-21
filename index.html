@@ -58,8 +58,18 @@
 
             const list = document.createElement("ul");
             for (const [name, record] of Object.entries(data)) {
+                const totalMatches = record.wins + record.losses;
+                const winPercent = totalMatches > 0 ? Math.round((record.wins / totalMatches) * 100) : 0;
+
                 const item = document.createElement("li");
-                item.textContent = `${name}: ${record.wins} Wins / ${record.losses} Losses`;
+                item.innerHTML = `
+                    <strong>${name}</strong><br>
+                    Matches: ${record.wins} Wins / ${record.losses} Losses<br>
+                    Match Win %: ${winPercent}%<br>
+                    Games: ${record.gamesWon || 0} of ${record.gamesPlayed || 0}<br>
+                    Streak: ${record.streak || "—"}<br>
+                    Last Opponent: ${record.lastOpponent || "—"}
+                `;
                 list.appendChild(item);
             }
             container.appendChild(list);
@@ -72,5 +82,6 @@
 
         showRecords();
     </script>
+    
 </body>
 </html>
