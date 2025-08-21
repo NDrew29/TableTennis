@@ -139,18 +139,23 @@ ul li {
 }
 
 table {
-    border: 1px solid #ddd;
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 1rem;
     font-size: 0.95rem;
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     padding: 0.6rem;
     text-align: center;
 }
 
 thead {
     background-color: #f8f9fa;
-    font-weight: bold;
+    cursor: pointer;
+}
+
+th:hover {
+    background-color: #e9ecef;
 }
