@@ -34,54 +34,119 @@
         </section>
     </div>
 
-    <script>
-        document.getElementById('matchSetupForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const p1 = document.getElementById('player1').value.trim();
-            const p2 = document.getElementById('player2').value.trim();
-            const matchType = document.getElementById('matchType').value;
+<script>
+    document.getElementById('matchSetupForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const p1 = document.getElementById('player1').value.trim();
+        const p2 = document.getElementById('player2').value.trim();
+        const matchType = document.getElementById('matchType').value;
 
-            if (!p1 || !p2) return;
+        if (!p1 || !p2) return;
 
-            window.location.href = `scoreboard.html?p1=${encodeURIComponent(p1)}&p2=${encodeURIComponent(p2)}&match=${matchType}`;
+        window.location.href = `scoreboard.html?p1=${encodeURIComponent(p1)}&p2=${encodeURIComponent(p2)}&match=${matchType}`;
+    });
+
+    function showRecords() {
+        const data = JSON.parse(localStorage.getItem("playerRecords") || "{}");
+        const container = document.getElementById("records");
+        container.innerHTML = "";
+
+        if (Object.keys(data).length === 0) {
+            container.textContent = "No records yet.";
+            return;
+        }
+
+        const table = document.createElement("table");
+        table.id = "recordsTable";
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Player ⬍</th>
+                    <th onclick="sortTable(1)">Wins ⬍</th>
+                    <th onclick="sortTable(2)">Losses ⬍</th>
+                    <th onclick="sortTable(3)">Win % ⬍</th>
+                    <th onclick="sortTable(4)">Games Won / Played ⬍</th>
+                    <th onclick="sortTable(5)">Streak ⬍</th>
+                    <th onclick="sortTable(6)">Last Opponent ⬍</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+
+        for (const [name, record] of Object.entries(data)) {
+            const totalMatches = record.wins + record.losses;
+            const winPercent = totalMatches > 0 ? Math.round((record.wins / totalMatches) * 100) : 0;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${record.wins}</td>
+                <td>${record.losses}</td>
+                <td>${winPercent}</td>
+                <td>${record.gamesWon || 0} / ${record.gamesPlayed || 0}</td>
+                <td>${record.streak || "—"}</td>
+                <td>${record.lastOpponent || "—"}</td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        container.appendChild(table);
+
+        // Add export button
+        const exportBtn = document.createElement("button");
+        exportBtn.textContent = "Export to CSV";
+        exportBtn.className = "btn mt-3";
+        exportBtn.onclick = exportTableToCSV;
+        container.appendChild(exportBtn);
+    }
+
+    function sortTable(colIndex) {
+        const table = document.getElementById("recordsTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        const isNumeric = colIndex !== 0 && colIndex !== 4 && colIndex !== 6;
+
+        const sortedRows = rows.sort((a, b) => {
+            const aText = a.children[colIndex].textContent;
+            const bText = b.children[colIndex].textContent;
+
+            return isNumeric
+                ? Number(bText) - Number(aText)
+                : aText.localeCompare(bText);
         });
 
-        function showRecords() {
-            const data = JSON.parse(localStorage.getItem("playerRecords") || "{}");
-            const container = document.getElementById("records");
-            container.innerHTML = "";
+        tbody.innerHTML = "";
+        sortedRows.forEach(row => tbody.appendChild(row));
+    }
 
-            if (Object.keys(data).length === 0) {
-                container.textContent = "No records yet.";
-                return;
-            }
+    function exportTableToCSV() {
+        const table = document.getElementById("recordsTable");
+        const rows = Array.from(table.querySelectorAll("tr"));
+        const csv = rows.map(row =>
+            Array.from(row.querySelectorAll("td, th"))
+                .map(cell => `"${cell.textContent.trim()}"`)
+                .join(",")
+        ).join("\n");
 
-            const list = document.createElement("ul");
-            for (const [name, record] of Object.entries(data)) {
-                const totalMatches = record.wins + record.losses;
-                const winPercent = totalMatches > 0 ? Math.round((record.wins / totalMatches) * 100) : 0;
+        const blob = new Blob([csv], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "player-records.csv";
+        a.click();
+    }
 
-                const item = document.createElement("li");
-                item.innerHTML = `
-                    <strong>${name}</strong><br>
-                    Matches: ${record.wins} Wins / ${record.losses} Losses<br>
-                    Match Win %: ${winPercent}%<br>
-                    Games: ${record.gamesWon || 0} of ${record.gamesPlayed || 0}<br>
-                    Streak: ${record.streak || "—"}<br>
-                    Last Opponent: ${record.lastOpponent || "—"}
-                `;
-                list.appendChild(item);
-            }
-            container.appendChild(list);
-        }
-
-        function resetRecords() {
-            localStorage.removeItem("playerRecords");
-            showRecords();
-        }
-
+    function resetRecords() {
+        localStorage.removeItem("playerRecords");
         showRecords();
-    </script>
+    }
+
+    showRecords();
+</script>
+
     
 </body>
 </html>
