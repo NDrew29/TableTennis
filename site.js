@@ -154,3 +154,12 @@ function updateStreak(currentStreak, isWin) {
         return isWin ? "W1" : "L1";
     }
 }
+
+// Rules modal behavior
+document.getElementById("rulesInfo").addEventListener("click", () => {
+    document.getElementById("rulesModal").classList.remove("hidden");
+});
+
+function closeRulesModal() {
+    document.getElementById("rulesModal").classList.add("hidden");
+}
